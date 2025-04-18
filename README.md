@@ -6,3 +6,6 @@ A demo for using the plugin in Godot can be found in "2d-platformer-demo"
 The code for training the style transfer model can be found in "Real-Time-Style-Transfer"
 
 This readme will be updated for setup and compiling soon!!! This code is currently uploaded only for reference
+
+
+![image](demo.png)
