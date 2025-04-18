@@ -6,8 +6,8 @@
 #include <godot_cpp/classes/viewport_texture.hpp>
 #include <godot_cpp/classes/sprite2d.hpp>
 #include <godot_cpp/classes/image.hpp>
-#include <godot_cpp/classes/image_texture.hpp>  // Added for ImageTexture
-#include <torch/script.h>  // LibTorch
+#include <godot_cpp/classes/image_texture.hpp>  
+#include <torch/script.h>  
 
 namespace godot {
     class MyCustomNode : public Node {
