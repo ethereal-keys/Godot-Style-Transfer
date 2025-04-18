@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://63278j4pukxi"]
+
+[ext_resource type="PackedScene" uid="uid://bf3wnwihk7ymg" path="res://game_singleplayer.tscn" id="1_wmhkb"]
+[ext_resource type="Script" uid="uid://7hf5oug3h4g6" path="res://my_custom_node.gd" id="2_mr1di"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_mr1di"]
+viewport_path = NodePath("Game")
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Game" parent="." instance=ExtResource("1_wmhkb")]
+size = Vector2i(512, 256)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(512, 299)
+
+[node name="MyCustomNode" type="MyCustomNode" parent="."]
+script = ExtResource("2_mr1di")
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+position = Vector2(130, 67)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("ViewportTexture_mr1di")

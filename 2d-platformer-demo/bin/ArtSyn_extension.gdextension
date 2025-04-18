@@ -1,0 +1,6 @@
+[configuration]
+entry_symbol = "my_extension_library_init"
+compatibility_minimum = "4.2"
+
+[libraries]
+linux.debug.x86_64 = "res://bin/libmy_extension.so"
