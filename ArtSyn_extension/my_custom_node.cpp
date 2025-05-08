@@ -36,6 +36,20 @@ MyCustomNode::MyCustomNode() {
         if (torch::cuda::is_available()) {
             UtilityFunctions::print("CUDA available, moving model to GPU...");
             model.to(torch::kCUDA);
+            // Calculate model VRAM usage
+            size_t model_memory = 0;
+            for (const auto& param : model.parameters()) {
+                if (param.is_cuda()) {
+                    model_memory += param.numel() * param.element_size();
+                }
+            }
+            for (const auto& buffer : model.buffers()) {
+                if (buffer.is_cuda()) {
+                    model_memory += buffer.numel() * buffer.element_size();
+                }
+            }
+            double model_memory_mb = static_cast<double>(model_memory) / (1024 * 1024);
+            UtilityFunctions::print("Model VRAM usage: ", model_memory_mb, " MB");
         } else {
             UtilityFunctions::print("CUDA not available, using CPU.");
         }
@@ -119,32 +133,42 @@ void MyCustomNode::_process(double delta) {
     } else {
         display_texture->update(processed_image);
     }
-    UtilityFunctions::print("Texture updated with style transfer!");
+    // UtilityFunctions::print("Texture updated with style transfer!");
+
+    // Calculate average FPS over 20 seconds
+    accumulated_time += delta;
+    frame_count++;
+    // if (accumulated_time >= 20.0) {
+    //     float average_fps = frame_count / accumulated_time;
+    //     UtilityFunctions::print("Average FPS over ", accumulated_time, " seconds: ", average_fps);
+    //     accumulated_time = 0;
+    //     frame_count = 0;
+    // }
+    float average_fps = frame_count / accumulated_time;
+    UtilityFunctions::print("Average FPS over ", accumulated_time, " seconds: ", average_fps);
 }
 
 Ref<Image> MyCustomNode::process_image(const Ref<Image>& input_image) {
-    auto start = std::chrono::high_resolution_clock::now();
-
-    UtilityFunctions::print("Starting process_image...");
+    // UtilityFunctions::print("Starting process_image...");
     Ref<Image> processed_image = input_image->duplicate();
 
     // Convert to RGB if the image is in RGBA format
     if (processed_image->get_format() == Image::FORMAT_RGBA8) {
         processed_image->convert(Image::FORMAT_RGB8);
-        UtilityFunctions::print("Converted image from RGBA to RGB");
+        // UtilityFunctions::print("Converted image from RGBA to RGB");
     }
 
     // Get the image dimensions dynamically
     int width = processed_image->get_width();
     int height = processed_image->get_height();
-    UtilityFunctions::print("Image dimensions: ", width, "x", height);
+    // UtilityFunctions::print("Image dimensions: ", width, "x", height);
 
     PackedByteArray data = processed_image->get_data();
-    UtilityFunctions::print("Got image data, size: ", data.size());
+    // UtilityFunctions::print("Got image data, size: ", data.size());
 
     // Check data size for RGB format (3 bytes per pixel)
     if (data.size() != width * height * 3) {
-        UtilityFunctions::print("Unexpected image data size: ", data.size(), ", expected: ", width * height * 3);
+        // UtilityFunctions::print("Unexpected image data size: ", data.size(), ", expected: ", width * height * 3);
         return Ref<Image>();
     }
 
@@ -152,14 +176,14 @@ Ref<Image> MyCustomNode::process_image(const Ref<Image>& input_image) {
     torch::Tensor tensor = torch::from_blob(const_cast<void*>(static_cast<const void*>(data.ptr())), {height, width, 3}, torch::kUInt8).to(torch::kFloat32);
     tensor = tensor / 255.0f;
     tensor = tensor.permute({2, 0, 1}).unsqueeze(0);  // To 1x3xHxW (CHW)
-    UtilityFunctions::print("Created tensor: ", tensor.sizes()[0], "x", tensor.sizes()[1], "x", tensor.sizes()[2], "x", tensor.sizes()[3]);
+    // UtilityFunctions::print("Created tensor: ", tensor.sizes()[0], "x", tensor.sizes()[1], "x", tensor.sizes()[2], "x", tensor.sizes()[3]);
 
     float mean[3] = {0.485, 0.456, 0.406};
     float std[3] = {0.229, 0.224, 0.225};
     torch::Tensor mean_tensor = torch::from_blob(mean, {3}, torch::kFloat32);
     torch::Tensor std_tensor = torch::from_blob(std, {3}, torch::kFloat32);
     tensor = (tensor - mean_tensor.view({1, 3, 1, 1})) / std_tensor.view({1, 3, 1, 1});
-    UtilityFunctions::print("Tensor filled with image data");
+    // UtilityFunctions::print("Tensor filled with image data");
 
     if (torch::cuda::is_available()) {
         tensor = tensor.to(torch::kCUDA);
@@ -168,18 +192,18 @@ Ref<Image> MyCustomNode::process_image(const Ref<Image>& input_image) {
     try {
         std::vector<torch::jit::IValue> inputs = {tensor};
         torch::Tensor output = model.forward(inputs).toTensor();
-        UtilityFunctions::print("Model inference done, output size: ", output.sizes()[0], "x", output.sizes()[1], "x", output.sizes()[2], "x", output.sizes()[3]);
+        // UtilityFunctions::print("Model inference done, output size: ", output.sizes()[0], "x", output.sizes()[1], "x", output.sizes()[2], "x", output.sizes()[3]);
 
         if (torch::cuda::is_available()) {
             output = output.to(torch::kCPU);
         }
 
         output = output.squeeze(0);  // 3xHxW (CHW)
-        UtilityFunctions::print("Output squeezed, size: ", output.sizes()[0], "x", output.sizes()[1], "x", output.sizes()[2]);
+        // UtilityFunctions::print("Output squeezed, size: ", output.sizes()[0], "x", output.sizes()[1], "x", output.sizes()[2]);
 
         // Verify output dimensions match input
         if (output.sizes()[1] != height || output.sizes()[2] != width) {
-            UtilityFunctions::print("Output dimensions do not match input: ", output.sizes()[1], "x", output.sizes()[2], ", expected: ", height, "x", width);
+            // UtilityFunctions::print("Output dimensions do not match input: ", output.sizes()[1], "x", output.sizes()[2], ", expected: ", height, "x", width);
             return Ref<Image>();
         }
 
@@ -187,30 +211,25 @@ Ref<Image> MyCustomNode::process_image(const Ref<Image>& input_image) {
         output = output.clamp(0, 1) * 255.0f;
         output = output.to(torch::kUInt8);
         output = output.permute({1, 2, 0}).contiguous();  // To HxWx3 (HWC)
-        UtilityFunctions::print("Permuted output shape: ", output.sizes()[0], "x", output.sizes()[1], "x", output.sizes()[2]);
+        // UtilityFunctions::print("Permuted output shape: ", output.sizes()[0], "x", output.sizes()[1], "x", output.sizes()[2]);
 
         Ref<Image> output_image = Image::create(width, height, false, Image::FORMAT_RGB8);
         PackedByteArray out_data = output_image->get_data();
-        UtilityFunctions::print("Created output image, data size: ", out_data.size());
+        // UtilityFunctions::print("Created output image, data size: ", out_data.size());
 
-        for (int y = 0; y < 2; y++) {
-            for (int x = 0; x < 2; x++) {
-                UtilityFunctions::print("Pixel (", y, ",", x, "): R=", output[y][x][0].item<uint8_t>(),
-                                        " G=", output[y][x][1].item<uint8_t>(),
-                                        " B=", output[y][x][2].item<uint8_t>());
-            }
-        }
+        // for (int y = 0; y < 2; y++) {
+        //     for (int x = 0; x < 2; x++) {
+        //         UtilityFunctions::print("Pixel (", y, ",", x, "): R=", output[y][x][0].item<uint8_t>(),
+        //                                 " G=", output[y][x][1].item<uint8_t>(),
+        //                                 " B=", output[y][x][2].item<uint8_t>());
+        //     }
+        // }
 
         memcpy(out_data.ptrw(), output.data_ptr<uint8_t>(), width * height * 3);
-        UtilityFunctions::print("Filled output image data");
+        // UtilityFunctions::print("Filled output image data");
 
         output_image->set_data(width, height, false, Image::FORMAT_RGB8, out_data);
-        UtilityFunctions::print("Set output image data");
-
-        auto end = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-        float fps = 1000.0f / duration;
-        UtilityFunctions::print("Process time: ", duration, " ms, FPS: ", fps);
+        // UtilityFunctions::print("Set output image data");
 
         return output_image;
     } catch (const std::exception& e) {
@@ -250,3 +269,30 @@ GDExtensionBool GDE_EXPORT my_extension_library_init(
     return init_obj.init();
 }
 }
+
+class MyCustomNode : public Node {
+    GDCLASS(MyCustomNode, Node);
+
+private:
+    SubViewport* viewport;
+    Sprite2D* display_sprite;
+    Ref<ImageTexture> display_texture;
+    torch::jit::script::Module model;
+    double accumulated_time = 0.0;
+    int frame_count = 0;
+
+protected:
+    static void _bind_methods();
+
+public:
+    MyCustomNode();
+    ~MyCustomNode();
+    String say_hello() const;
+    void set_viewport(NodePath path);
+    NodePath get_viewport() const;
+    void set_display_sprite(NodePath path);
+    NodePath get_display_sprite() const;
+    void _ready() override;
+    void _process(double delta) override;
+    Ref<Image> process_image(const Ref<Image>& input_image);
+};

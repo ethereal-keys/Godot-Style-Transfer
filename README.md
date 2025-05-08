@@ -11,5 +11,4 @@ The model is based off this repo: https://github.com/1627180283/real-time-Style-
 
 This readme will be updated for setup and compiling soon!!! This code is currently uploaded only for reference
 
-
-[![demo.png](demo.png)](https://youtu.be/S_7D6VJ0PrM)
+[![demo.png](image.png)](https://youtu.be/ad-yBz3aguA)
