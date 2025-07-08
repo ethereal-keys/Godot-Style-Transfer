@@ -9,7 +9,7 @@ The code for training the style transfer model can be found in "Real-Time-Style-
 
 The model is based off this repo: https://github.com/1627180283/real-time-Style-Transfer
 
-This readme will be updated for setup and compiling soon!!! This code is currently uploaded only for reference
+This readme will be updated for setup and compiling soon!!! This code is currently uploaded only for reference.
 The image below links to the youtube demo.
 
 [![demo.png](image.png)](https://youtu.be/ad-yBz3aguA)
