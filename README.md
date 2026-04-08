@@ -2,10 +2,29 @@
 
 ArtSyn is a Godot 4 GDExtension addon for real-time style transfer on viewport output.
 
+## Demo
+
+<p>
+  <a href="https://youtu.be/ad-yBz3aguA">
+    <img src="https://img.youtube.com/vi/ad-yBz3aguA/hqdefault.jpg" alt="Watch the ArtSyn demo on YouTube" width="720">
+  </a>
+</p>
+
+Watch the current plugin demo on YouTube:
+
+- <https://youtu.be/ad-yBz3aguA>
+
 The repo now contains both:
 
 - the native extension source in `ArtSyn_extension/`
 - a project-facing addon layout in `2d-platformer-demo/addons/artsyn/`
+
+## Docs
+
+- [Addon README](2d-platformer-demo/addons/artsyn/README.md)
+- [Build Guide](ArtSyn_extension/BUILDING.md)
+- [Install And Release Guide](docs/install-and-release-guide.md)
+- [Distribution Roadmap](docs/distribution-roadmap.md)
 
 ## Repo Roles
 
@@ -68,21 +87,6 @@ This lets users choose between smaller downloads and better GPU acceleration.
   project-facing addon layout intended for distribution
 - `Real-Time-Style-Transfer/`
   training and export code for the style-transfer model
-
-## Docs
-
-- [Addon README](2d-platformer-demo/addons/artsyn/README.md)
-- [Build Guide](ArtSyn_extension/BUILDING.md)
-- [Install And Release Guide](docs/install-and-release-guide.md)
-- [Distribution Roadmap](docs/distribution-roadmap.md)
-
-## Demo
-
-Watch the current plugin demo on YouTube:
-
-- <https://youtu.be/ad-yBz3aguA>
-
-The video shows the Godot demo project running with the style-transfer effect in-engine. The repo is being cleaned up so the code, packaging, and install flow match that public-facing result more closely.
 
 ## Credits
 
