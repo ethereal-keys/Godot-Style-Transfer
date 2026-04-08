@@ -15,6 +15,11 @@ size = Vector2i(512, 256)
 position = Vector2(512, 299)
 
 [node name="MyCustomNode" type="MyCustomNode" parent="."]
+viewport_path = NodePath("../Game")
+display_sprite_path = NodePath("../Sprite2D")
+backend_id = "onnx"
+model_path = "res://addons/artsyn/models/model.onnx"
+benchmark_logging_enabled = false
 script = ExtResource("2_mr1di")
 
 [node name="Sprite2D2" type="Sprite2D" parent="."]

@@ -1,3 +1,16 @@
+# ArtSyn Model Training And Export
+
+This folder is the training and export workspace for ArtSyn models.
+
+Use it to:
+
+- train new style-transfer checkpoints
+- compare architecture variants
+- export ONNX models for the Godot addon
+- validate model quality before shipping a new runtime model
+
+The documentation and scripts below are still based on the upstream real-time style-transfer project, but this folder now serves as the model pipeline side of the ArtSyn repo.
+
 # Style Transfer -- a real-time implementation on mobile devices
 
 [中文版本](./docs/README_ch.md)

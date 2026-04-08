@@ -1,14 +1,89 @@
-# Godot-Style-Transfer
-This repo compiles to a custom Godot plugin to run Style Transfer in Engine on viewport textures
+# Godot Style Transfer
 
-The plugin code can be found in "ArtSyn_extension" folder
+ArtSyn is a Godot 4 GDExtension addon for real-time style transfer on viewport output.
 
-A demo for using the plugin in Godot can be found in "2d-platformer-demo"
+The repo now contains both:
 
-The code for training the style transfer model can be found in "Real-Time-Style-Transfer"
+- the native extension source in `ArtSyn_extension/`
+- a project-facing addon layout in `2d-platformer-demo/addons/artsyn/`
 
-The model is based off this repo: https://github.com/1627180283/real-time-Style-Transfer
+## Repo Roles
 
-This readme will be updated for setup and compiling soon!!! This code is currently uploaded only for reference
+The repo is organized around three main surfaces:
 
-[![demo.png](image.png)](https://youtu.be/ad-yBz3aguA)
+- `ArtSyn_extension/`
+  plugin source, build logic, and packaging scripts
+- `2d-platformer-demo/`
+  usage example project for testing and showcasing the addon
+- `Real-Time-Style-Transfer/`
+  training and export pipeline for making new models
+
+## What Works Today
+
+- Linux `x86_64`
+- Godot `4.2+`
+- ONNX Runtime backend
+- bundled default model inside the addon
+- CPU and NVIDIA CUDA runtime packaging paths
+
+This is still an early release candidate, but it is no longer just a machine-local prototype.
+
+## Quick Start
+
+If you just want to try the addon in Godot:
+
+1. Put `addons/artsyn/` into your project.
+2. Make sure the addon contains a matching runtime `bin/` folder.
+3. Open the project in Godot.
+4. Add `MyCustomNode` to your scene.
+5. Set:
+   - `viewport_path`
+   - `display_sprite_path`
+6. Keep the defaults for the ONNX path:
+   - `backend_id = "onnx"`
+   - `model_path = "res://addons/artsyn/models/model.onnx"`
+
+The default model is bundled with the addon, so users do not need to fetch a separate model for the first install.
+
+## Runtime Packages
+
+Current distribution strategy:
+
+- `artsyn-core`
+  addon metadata, scripts, models, and docs
+- `artsyn-linux-x86_64-onnxruntime`
+  smaller CPU-oriented runtime pack
+- `artsyn-linux-x86_64-onnxruntime-cuda`
+  larger NVIDIA runtime pack with better performance
+
+This lets users choose between smaller downloads and better GPU acceleration.
+
+## Repo Layout
+
+- `ArtSyn_extension/`
+  native extension source, build scripts, and packaging scripts
+- `2d-platformer-demo/`
+  example Godot project that consumes the addon
+- `2d-platformer-demo/addons/artsyn/`
+  project-facing addon layout intended for distribution
+- `Real-Time-Style-Transfer/`
+  training and export code for the style-transfer model
+
+## Docs
+
+- [Addon README](2d-platformer-demo/addons/artsyn/README.md)
+- [Build Guide](ArtSyn_extension/BUILDING.md)
+- [Install And Release Guide](docs/install-and-release-guide.md)
+- [Distribution Roadmap](docs/distribution-roadmap.md)
+
+## Demo
+
+Watch the current plugin demo on YouTube:
+
+- <https://youtu.be/ad-yBz3aguA>
+
+The video shows the Godot demo project running with the style-transfer effect in-engine. The repo is being cleaned up so the code, packaging, and install flow match that public-facing result more closely.
+
+## Credits
+
+- Model/training base repo: <https://github.com/1627180283/real-time-Style-Transfer>

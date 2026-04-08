@@ -1,44 +1,12 @@
-env = Environment()
+from SCons.Script import Exit
 
-# Include paths for godot-cpp and LibTorch
-env.Append(CPPPATH=[
-    'godot-cpp/include',
-    'godot-cpp/gen/include',
-    'godot-cpp/gdextension',
-    '/home/sushanth/Dev/libtorch/include',
-    '/home/sushanth/Dev/libtorch/include/torch/csrc/api/include'
-])
+print("SCons is no longer the supported build path for ArtSyn_extension.")
+print("Use CMake instead.")
+print("Example:")
+print("  cmake -S ArtSyn_extension -B build \\")
+print("    -DGODOT_CPP_DIR=/path/to/godot-cpp \\")
+print("    -DGODOT_CPP_LIBRARY=/path/to/libgodot-cpp.linux.template_debug.x86_64.a \\")
+print("    -DCMAKE_PREFIX_PATH=/path/to/libtorch")
+print("  cmake --build build")
 
-# Library paths for godot-cpp and LibTorch
-env.Append(LIBPATH=[
-    'godot-cpp/bin',
-    '/home/sushanth/Dev/libtorch/lib'
-])
-
-# Add CUDA library path (adjust the path if CUDA is installed elsewhere, e.g., /usr/local/cuda-12.1)
-cuda_path = "/usr/local/cuda"
-env.Append(LIBPATH=[f"{cuda_path}/lib64"])
-
-# Libraries to link against
-env.Append(LIBS=[
-    'libgodot-cpp.linux.template_debug.x86_64',
-    'torch',
-    'torch_cpu',
-    'torch_cuda',
-    'c10',
-    'c10_cuda',  # Added for CUDA support
-    'cudart',    # CUDA runtime library
-    'cublas',    # CUDA BLAS library
-    # 'cudnn'      # cuDNN library for neural networks
-])
-
-# Compiler and linker flags
-env.Append(CPPFLAGS=['-std=c++17'])
-env.Append(LINKFLAGS=[
-    '-Wl,-rpath,/home/sushanth/Dev/libtorch/lib',
-    '-Wl,--no-undefined'
-])
-
-# Build settings
-env.VariantDir('build', '.', duplicate=0)
-env.SharedLibrary('bin/libmy_extension', ['my_custom_node.cpp'])
+Exit(1)

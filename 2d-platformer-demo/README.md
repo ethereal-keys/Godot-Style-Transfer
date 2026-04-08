@@ -1,45 +1,48 @@
-# 2D Platformer
+# ArtSyn Demo Project
 
-This demo is a pixel art 2D platformer with graphics and sound.
+This folder is the usage example for the ArtSyn plugin.
 
-It shows you how to code characters and physics-based objects
-in a real game context. This is a relatively complete demo
-where the player can jump, walk on slopes, fire bullets,
-interact with enemies, and more. It contains one closed
-level, and the player is invincible, unlike the enemies.
+It is a Godot 4 platformer demo wired to show real-time style transfer on a `SubViewport` through `MyCustomNode`. The project is useful for:
 
-You will find most of the demo’s content in the `level.tscn` scene.
-You can open it from the default `game.tscn` scene, or double
-click on `level.tscn` in the `src/level/` directory.
+- validating packaged addon builds
+- checking runtime provider selection in a real scene
+- demonstrating how to connect `viewport_path` and `display_sprite_path`
+- profiling `inference_scale` and other runtime settings
 
-We invite you to open the demo's GDScript files in the editor as
-they contain a lot of comments that explain how each class works.
+## Key Files
 
-Language: GDScript
+- `project.godot`
+  demo project entry point
+- `game_viewport.tscn`
+  main ArtSyn example scene
+- `my_custom_node.gd`
+  simple scene-side wrapper around `MyCustomNode`
+- `addons/artsyn/`
+  project-facing addon layout used for local testing and packaging
 
-Renderer: Compatibility
+## What This Project Should Represent
 
-Check out this demo on the asset library: https://godotengine.org/asset-library/asset/120
+This folder is intentionally the example consumer of the plugin, not the source of truth for the native extension itself.
 
-## Features
+- plugin source belongs in `ArtSyn_extension/`
+- model training and export belong in `Real-Time-Style-Transfer/`
+- packaged addon/runtime combinations should be tested here
 
-- Side-scrolling player controller using [`KinematicBody2D`](https://docs.godotengine.org/en/latest/classes/class_kinematicbody2d.html).
-    - Can walk on and snap to slopes.
-    - Can shoot, including while jumping.
-- Enemies that crawl on the floor and change direction when they encounter an obstacle.
-- Camera that stays within the level’s bounds.
-- Supports keyboard and gamepad controls.
-- Platforms that can move in any direction.
-- Gun that shoots bullets with rigid body (natural) physics.
-- Collectible coins.
-- Pause and pause menu.
-- Pixel art visuals.
-- Sound effects and music.
+## Running The Demo
 
-## Screenshots
+1. Make sure `addons/artsyn/` contains the addon files and a matching runtime `bin/` folder.
+2. Open this folder as a Godot project.
+3. Run `game_viewport.tscn`.
+4. Watch the startup log for the selected execution provider.
 
-![2D Platformer](screenshots/platformer.webp)
+Expected examples:
 
-## Music
+```text
+Loaded model ... using backend ONNX Runtime [CPUExecutionProvider]
+Loaded model ... using backend ONNX Runtime [CUDAExecutionProvider]
+```
 
-[*Pompy*](https://soundcloud.com/madbr/pompy) by Hubert Lamontagne (madbr)
+## Notes
+
+- The current demo defaults to the ONNX model under `addons/artsyn/models/model.onnx`.
+- This project may regenerate `.godot/` editor files locally; those are not meant to be tracked.
