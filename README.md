@@ -6,7 +6,7 @@ ArtSyn is a Godot 4 GDExtension addon for real-time style transfer on viewport o
 
 <p>
   <a href="https://youtu.be/ad-yBz3aguA">
-    <img src="https://img.youtube.com/vi/ad-yBz3aguA/hqdefault.jpg" alt="Watch the ArtSyn demo on YouTube" width="720">
+    <img src="docs/assets/youtube-demo-button.svg" alt="Watch the ArtSyn demo on YouTube" width="360">
   </a>
 </p>
 

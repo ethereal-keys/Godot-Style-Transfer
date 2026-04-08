@@ -1,0 +1,8 @@
+<svg width="360" height="96" viewBox="0 0 360 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="2" y="2" width="356" height="92" rx="18" fill="#FF0033"/>
+  <rect x="2" y="2" width="356" height="92" rx="18" stroke="#B00024" stroke-width="4"/>
+  <circle cx="62" cy="48" r="26" fill="white" fill-opacity="0.16"/>
+  <path d="M54 34L78 48L54 62V34Z" fill="white"/>
+  <text x="104" y="42" fill="white" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">Watch Demo</text>
+  <text x="104" y="64" fill="white" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="500">YouTube Preview</text>
+</svg>
