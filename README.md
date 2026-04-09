@@ -8,11 +8,20 @@ ArtSyn is a Godot 4 GDExtension addon for real-time style transfer on viewport o
   <a href="https://youtu.be/ad-yBz3aguA">
     <img src="docs/assets/youtube-demo-button.svg" alt="Watch the ArtSyn demo on YouTube" width="360">
   </a>
+  <a href="https://sushanth-kashyap.vercel.app/projects/style-transfer">
+    <img src="docs/assets/writeup-button.svg" alt="Read the ArtSyn project write-up" width="360">
+  </a>
 </p>
 
 Watch the current plugin demo on YouTube:
 
 - <https://youtu.be/ad-yBz3aguA>
+
+Read the longer project write-up and development notes:
+
+- <https://sushanth-kashyap.vercel.app/projects/style-transfer>
+
+The write-up is still a good retrospective on how the project came together, but the repo docs below are the current source of truth for the addon layout, build flow, and packaging.
 
 The repo now contains both:
 
