@@ -17,6 +17,15 @@ Demo video: [YouTube](https://youtu.be/ad-yBz3aguA) | Write-up: [Project notes](
 
 The write-up is still a good retrospective on how the project came together, but the repo docs below are the current source of truth for the addon layout, build flow, and packaging.
 
+## Results
+
+<p align="center">
+  <img src="docs/assets/results-showcase.png" alt="A platformer scene shown as the original frame on top and four stylized outputs below: Monet, Udnie, Van Gogh, and Mosaic." width="628">
+</p>
+<p align="center">
+  <em>One live scene, multiple style-transfer outputs.</em>
+</p>
+
 The repo now contains both:
 
 - the native extension source in `ArtSyn_extension/`
